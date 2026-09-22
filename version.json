@@ -1,0 +1,17 @@
+{
+  "version": "1.4.1",
+  "code": 141,
+  "date": "2026-09-21",
+  "force": false,
+  "minVersion": 100,
+  "size": "175KB",
+  "summary": "支持在线热更新 + 账单搜索 + 图标高清",
+  "changelog": [
+    "新增在线热更新：通过网址使用时点一下即可升级，无需重装",
+    "新增账单搜索：备注/分类/金额/日期，关键词高亮",
+    "新增搜索历史与收支筛选",
+    "桌面图标新增 512 高清，自适应图标优化"
+  ],
+  "downloadUrl": "https://zghkz.github.io/zquan/index.html",
+  "apkUrl": "https://zghkz.github.io/zquan/Z全记账助手.apk"
+}
