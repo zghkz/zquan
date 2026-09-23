@@ -163,16 +163,96 @@ canvas{width:100%;height:180px;display:block}
 .stat-pill span{font-size:11px;color:var(--sub)}
 .chal{margin-bottom:10px}
 .chal .ct{display:flex;justify-content:space-between;font-size:13px;margin-bottom:4px}
-.moods{display:flex;gap:6px;flex-wrap:wrap}
-.moods button{flex:1;min-width:52px;border:1px solid var(--line);background:#fff;border-radius:10px;
-  padding:8px 2px;font-size:20px;cursor:pointer;font-family:inherit}
-.moods button.on{background:var(--green-soft);border-color:var(--green)}
-.shifts{display:flex;gap:6px}
-.shifts button{flex:1;border:1px solid var(--line);background:#fff;border-radius:10px;
-  padding:8px 2px;font-size:12px;cursor:pointer;font-family:inherit}
-.shifts button.on{background:var(--blue-soft);border-color:var(--blue);color:var(--blue);font-weight:600}
+.moods{display:grid;grid-template-columns:repeat(6,1fr);gap:6px}
+.moods button{border:1px solid var(--line);background:#fff;border-radius:10px;
+  padding:9px 0;font-size:19px;cursor:pointer;font-family:inherit;transition:all .15s}
+.moods button:active{transform:scale(.92)}
+.moods button.on{background:var(--green-soft);border-color:var(--green);
+  box-shadow:0 2px 8px rgba(16,185,129,.2)}
+/* 班次选择：按类型分组的网格卡片 */
+.shiftwrap{display:flex;flex-direction:column;gap:12px}
+.shiftgrp{}
+.shiftgrp-t{font-size:11px;color:var(--sub);margin-bottom:6px;display:flex;align-items:center;gap:6px}
+.shiftgrp-t::after{content:'';flex:1;height:1px;background:var(--line)}
+.shifts{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.shifts button{position:relative;border:1px solid var(--line);background:#fff;border-radius:12px;
+  padding:10px 8px;cursor:pointer;font-family:inherit;text-align:left;
+  display:flex;flex-direction:column;gap:2px;transition:all .15s}
+.shifts button:active{transform:scale(.97)}
+.shifts button .sn{font-size:13px;font-weight:600;color:var(--ink);line-height:1.25}
+.shifts button .sd{font-size:10px;color:var(--sub);line-height:1.3}
+.shifts button .sp{font-size:10px;font-weight:700;margin-top:2px}
+
+/* 各类型配色 */
+.shifts button.g-wd{border-color:#a7f3d0}
+.shifts button.g-wd .sp{color:#059669}
+.shifts button.g-wd.on{background:#ecfdf5;border-color:#059669;box-shadow:0 2px 8px rgba(5,150,105,.18)}
+.shifts button.g-wd.on .sn{color:#065f46}
+
+.shifts button.g-sat{border-color:#fde68a}
+.shifts button.g-sat .sp{color:#d97706}
+.shifts button.g-sat.on{background:#fffbeb;border-color:#f59e0b;box-shadow:0 2px 8px rgba(245,158,11,.2)}
+.shifts button.g-sat.on .sn{color:#92400e}
+
+.shifts button.g-sun{border-color:#ddd6fe}
+.shifts button.g-sun .sp{color:#7c3aed}
+.shifts button.g-sun.on{background:#f5f3ff;border-color:#8b5cf6;box-shadow:0 2px 8px rgba(139,92,246,.2)}
+.shifts button.g-sun.on .sn{color:#5b21b6}
+
+.shifts button.g-hol{border-color:#fecaca}
+.shifts button.g-hol .sp{color:#dc2626}
+.shifts button.g-hol.on{background:#fef2f2;border-color:#ef4444;box-shadow:0 2px 8px rgba(239,68,68,.2)}
+.shifts button.g-hol.on .sn{color:#991b1b}
+
+.shifts button.g-off{border-color:var(--line)}
+.shifts button.g-off .sp{color:var(--sub)}
+.shifts button.g-off.on{background:#f3f4f6;border-color:#6b7280;box-shadow:0 2px 8px rgba(107,114,128,.16)}
+.shifts button.g-off.on .sn{color:#374151}
+
+/* 选中标记 */
+.shifts button.on::after{content:'✓';position:absolute;top:6px;right:8px;
+  font-size:12px;font-weight:700;opacity:.85}
 .tip{background:linear-gradient(135deg,#fffbeb,#fef3c7);border:1px solid #fde68a;border-radius:12px;
   padding:11px;font-size:13px;color:#92400e}
+/* ---- 顶部北京时间 ---- */
+.bjrow{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.bjclock{background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.22);
+  border-radius:12px;padding:6px 12px;text-align:center;flex-shrink:0}
+.bjclock .bjt{font-size:17px;font-weight:700;letter-spacing:.5px;
+  font-variant-numeric:tabular-nums;font-feature-settings:"tnum"}
+.bjclock .bjd{font-size:10px;opacity:.85;margin-top:1px}
+
+/* ---- 悬浮计算器 ---- */
+.fab{position:fixed;right:16px;bottom:78px;width:52px;height:52px;border-radius:50%;
+  border:0;background:var(--green);color:#fff;font-size:22px;
+  box-shadow:0 4px 14px rgba(16,185,129,.45);cursor:pointer;z-index:60;font-family:inherit}
+.fab:active{transform:scale(.94)}
+.mask{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:100;
+  display:none;align-items:flex-end;justify-content:center}
+.mask.on{display:flex}
+.calcbox{width:100%;max-width:420px;background:#fff;border-radius:18px 18px 0 0;
+  padding:14px 14px calc(14px + env(safe-area-inset-bottom));animation:slideup .22s ease}
+@keyframes slideup{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.calc-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.calc-close{border:0;background:#f3f4f6;border-radius:8px;width:30px;height:30px;
+  font-size:15px;cursor:pointer;font-family:inherit}
+.calc-screen{background:#f9fafb;border-radius:12px;padding:12px 14px;text-align:right;margin-bottom:12px}
+.calc-expr{font-size:12px;color:var(--sub);min-height:16px;word-break:break-all}
+.calc-out{font-size:30px;font-weight:700;font-variant-numeric:tabular-nums;
+  word-break:break-all;line-height:1.2}
+.calc-pad{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.ck{border:0;background:#f3f4f6;border-radius:12px;padding:14px 0;font-size:19px;
+  font-weight:600;cursor:pointer;font-family:inherit;color:var(--ink)}
+.ck:active{opacity:.65}
+.ck.op{background:#d1fae5;color:var(--green)}
+.ck.fn{background:#e5e7eb;color:var(--sub)}
+.ck.eq{background:var(--green);color:#fff}
+.ck.wide{grid-column:span 2}
+.calc-tip{text-align:center;font-size:11px;color:var(--sub);margin-top:10px}
+.calc-actions{display:flex;gap:8px;margin-top:8px}
+.calc-actions .btn{flex:1;font-size:12px;padding:8px 0}
+.cktime{font-size:11px;color:var(--sub);margin-top:6px}
+
 /* ---- 搜索 ---- */
 .searchbar{position:relative;display:flex;align-items:center;gap:8px;background:#f3f4f6;
   border-radius:12px;padding:8px 10px}
@@ -307,8 +387,16 @@ body.standalone #statusbar{display:block}
   <div class="sp-dot"><i></i></div>
 </div>
 <header>
-  <h1>💰 Z全记账助手</h1>
-  <p>底薪 + 加班费自动算 · 提前预知到手工资 · 日常收支记账</p>
+  <div class="bjrow">
+    <div>
+      <h1>💰 Z全记账助手</h1>
+      <p>底薪 + 加班费自动算 · 提前预知到手工资 · 日常收支记账</p>
+    </div>
+    <div class="bjclock" title="北京时间">
+      <div class="bjt" id="bj-time">--:--:--</div>
+      <div class="bjd" id="bj-date">--</div>
+    </div>
+  </div>
 </header>
 
 <main>
@@ -353,8 +441,9 @@ body.standalone #statusbar{display:block}
       <div class="moods" id="c-moods"></div>
     </div>
     <div style="margin-bottom:12px">
-      <label>班次（区分白班/夜班）</label>
-      <div class="shifts" id="c-shifts"></div>
+      <label>今日班次</label>
+      <div id="c-shifts"></div>
+      <div class="cktime" id="c-cktime"></div>
     </div>
 
     <div class="grid3" style="margin-bottom:10px">
@@ -697,6 +786,50 @@ body.standalone #statusbar{display:block}
   <button data-p="p-stats" onclick="go('p-stats')"><span class="ico">📊</span>统计</button>
   <button data-p="p-set" onclick="go('p-set')"><span class="ico">⚙️</span>设置</button>
 </nav>
+<button class="fab" onclick="openCalc()" title="计算器">🧮</button>
+
+<div class="mask" id="calc-mask" onclick="if(event.target===this)closeCalc()">
+  <div class="calcbox">
+    <div class="calc-head">
+      <b>🧮 计算器</b>
+      <button class="calc-close" onclick="closeCalc()">✕</button>
+    </div>
+    <div class="calc-screen">
+      <div class="calc-expr" id="calc-expr"></div>
+      <div class="calc-out" id="calc-out">0</div>
+    </div>
+    <div class="calc-pad">
+      <button class="ck fn" onclick="calcKey('C')">C</button>
+      <button class="ck fn" onclick="calcKey('back')">⌫</button>
+      <button class="ck fn" onclick="calcKey('%')">%</button>
+      <button class="ck op" onclick="calcKey('/')">÷</button>
+
+      <button class="ck" onclick="calcKey('7')">7</button>
+      <button class="ck" onclick="calcKey('8')">8</button>
+      <button class="ck" onclick="calcKey('9')">9</button>
+      <button class="ck op" onclick="calcKey('*')">×</button>
+
+      <button class="ck" onclick="calcKey('4')">4</button>
+      <button class="ck" onclick="calcKey('5')">5</button>
+      <button class="ck" onclick="calcKey('6')">6</button>
+      <button class="ck op" onclick="calcKey('-')">−</button>
+
+      <button class="ck" onclick="calcKey('1')">1</button>
+      <button class="ck" onclick="calcKey('2')">2</button>
+      <button class="ck" onclick="calcKey('3')">3</button>
+      <button class="ck op" onclick="calcKey('+')">+</button>
+
+      <button class="ck wide" onclick="calcKey('0')">0</button>
+      <button class="ck" onclick="calcKey('.')">.</button>
+      <button class="ck eq" onclick="calcKey('=')">=</button>
+    </div>
+    <div class="calc-tip">算完可直接填入记账金额或加班小时</div>
+    <div class="calc-actions">
+      <button class="btn gray" onclick="calcTo('l-amount')">填入记账金额</button>
+      <button class="btn gray" onclick="calcTo('c-othours')">填入加班小时</button>
+    </div>
+  </div>
+</div>
 <div class="toast" id="toast"></div>
 
 <script id="calc-core">
@@ -1296,6 +1429,138 @@ function renderSearch(){
   box.innerHTML = resHtml(r, kw);
 }
 
+/* ============ 内置计算器 ========== */
+var calcBuf = '0', calcPrev = null, calcOp = null, calcFresh = true;
+
+/* 纯函数：安全求值，只接受数字与 + - * / . ( ) %，不做 eval */
+function calcEval(expr){
+  var e = String(expr == null ? '' : expr);
+  if (!/^[0-9+\-*/.%() ]*$/.test(e)) return NaN;
+  var t = e.replace(/×/g,'*').replace(/÷/g,'/').replace(/%/g,'/100').replace(/\s/g,'');
+  if (!t) return NaN;
+  if (/[^0-9+\-*/.()]/.test(t)) return NaN;
+  if ((t.match(/\(/g)||[]).length !== (t.match(/\)/g)||[]).length) return NaN;
+  /* 开头的 - 视为负号：把 -x 补成 0-x，支持 -5+3 */
+  t = t.replace(/(^|\()-/g, '$10-');
+  try{
+    var stack = [], out = [], i = 0;
+    var prec = {'+':1,'-':1,'*':2,'/':2};
+    var expectNum = true;   // 用于把连续的 - 识别为负号而非减号
+    while (i < t.length){
+      var c = t[i];
+      if (/[0-9.]/.test(c)){
+        var j = i;
+        while (j < t.length && /[0-9.]/.test(t[j])) j++;
+        var seg = t.slice(i, j);
+        if ((seg.match(/\./g)||[]).length > 1) return NaN;
+        out.push(seg); i = j; expectNum = false; continue;
+      }
+      /* 运算符后的 - 是负号，例如 5*-3 */
+      if (c === '-' && expectNum && i > 0 && /[+\-*/]/.test(t[i-1])){
+        var k = i + 1, num2 = '';
+        while (k < t.length && /[0-9.]/.test(t[k])){ num2 += t[k]; k++; }
+        if (!num2) return NaN;
+        out.push('-' + num2); i = k; expectNum = false; continue;
+      }
+      if (c === '('){ stack.push(c); i++; expectNum = true; continue; }
+      if (c === ')'){
+        while (stack.length && stack[stack.length-1] !== '(') out.push(stack.pop());
+        if (stack[stack.length-1] !== '(') return NaN;
+        stack.pop(); i++; expectNum = false; continue;
+      }
+      if (prec[c]){
+        while (stack.length && stack[stack.length-1] !== '(' && prec[stack[stack.length-1]] >= prec[c])
+          out.push(stack.pop());
+        stack.push(c); i++; expectNum = true; continue;
+      }
+      return NaN;
+    }
+    while (stack.length){ var s = stack.pop(); if (s === '(') return NaN; out.push(s); }
+    var st = [];
+    for (var k = 0; k < out.length; k++){
+      var tk = out[k];
+      if (/^-?[0-9.]+$/.test(tk)){            /* 兼容负数 */
+        var v = parseFloat(tk);
+        if (!isFinite(v)) return NaN;
+        st.push(v); continue;
+      }
+      if (st.length < 2) return NaN;
+      var b = st.pop(), a = st.pop();
+      if (tk === '+') st.push(a+b);
+      else if (tk === '-') st.push(a-b);
+      else if (tk === '*') st.push(a*b);
+      else if (tk === '/'){ if (Math.abs(b) < 1e-12) return NaN; st.push(a/b); }
+      else return NaN;
+    }
+    if (st.length !== 1) return NaN;
+    var r = st[0];
+    if (!isFinite(r)) return NaN;
+    return Math.round(r * 1e10) / 1e10;
+  }catch(e){ return NaN; }
+}
+
+function calcKey(k){
+  if (k === 'C'){ calcBuf = '0'; calcPrev = null; calcOp = null; calcFresh = true; }
+  else if (k === 'back'){
+    calcBuf = calcBuf.length > 1 ? calcBuf.slice(0, -1) : '0';
+  }
+  else if (k === '%'){
+    var v = calcEval(calcBuf);
+    calcBuf = isNaN(v) ? '0' : String(v / 100);
+    calcFresh = true;
+  }
+  else if (k === '='){
+    if (calcOp && calcPrev !== null){
+      var expr = calcPrev + ' ' + calcOp + ' ' + calcBuf;
+      var r = calcEval(expr);
+      if ($('calc-expr')) $('calc-expr').textContent =
+        calcPrev + ' ' + (calcOp==='*'?'×':calcOp==='/'?'÷':calcOp) + ' ' + calcBuf + ' =';
+      calcBuf = isNaN(r) ? '错误' : String(r);
+      calcPrev = null; calcOp = null; calcFresh = true;
+    }
+  }
+  else if (k === '+' || k === '-' || k === '*' || k === '/'){
+    var cur = calcEval(calcBuf);
+    if (!isNaN(cur)){
+      if (calcOp && calcPrev !== null && !calcFresh){
+        var cr = calcEval(calcPrev + ' ' + calcOp + ' ' + cur);
+        if (!isNaN(cr)){ calcPrev = String(cr); calcBuf = String(cr); }
+        else calcPrev = String(cur);
+      } else calcPrev = String(cur);
+      calcOp = k; calcFresh = true;
+      if ($('calc-expr')) $('calc-expr').textContent =
+        calcPrev + ' ' + (k==='*'?'×':k==='/'?'÷':k);
+    }
+  }
+  else if (k === '.'){
+    if (calcFresh){ calcBuf = '0.'; calcFresh = false; }
+    else if (calcBuf.indexOf('.') < 0) calcBuf += '.';
+  }
+  else if (/^[0-9]$/.test(k)){
+    if (calcFresh || calcBuf === '0' || calcBuf === '错误'){ calcBuf = k; calcFresh = false; }
+    else calcBuf += k;
+  }
+  renderCalc();
+}
+function renderCalc(){
+  if (!$('calc-out')) return;
+  var d = calcBuf === '错误' ? '错误' : calcBuf;
+  var n = parseFloat(d);
+  $('calc-out').textContent = isNaN(n) ? d :
+    (Math.round(n*1e6)/1e6).toLocaleString('zh-CN', {maximumFractionDigits: 6});
+}
+function openCalc(){ if ($('calc-mask')) $('calc-mask').classList.add('on'); }
+function closeCalc(){ if ($('calc-mask')) $('calc-mask').classList.remove('on'); }
+function calcTo(targetId){
+  var el = $(targetId);
+  if (!el){ toast('请先打开对应页面'); return; }
+  var n = parseFloat(calcBuf);
+  if (isNaN(n)){ toast('没有可填入的数值'); return; }
+  el.value = String(Math.round(n*100)/100);
+  closeCalc();
+  toast('已填入 ' + el.value);
+}
+
 /* ---------- 统计 ---------- */
 function renderStats(){
   var mt = $('s-mtitle'); if (mt) mt.textContent = lMonth + ' ';
@@ -1442,7 +1707,90 @@ function clearAll(){
 
 /* ========== 日历签到 / 游戏化（新增） ========== */
 var MOODS = ['😊','😐','😫','🤒','🥳','😤'];
-var SHIFTS = [{k:'day',n:'☀️ 白班'},{k:'night',n:'🌙 夜班'},{k:'rest',n:'😴 休息'},{k:'leave',n:'🏖️ 请假'}];
+/* 班次：上班类自动记 3.5h 加班（16:00 之后算加班），下早班记 0；休息/请假不记 */
+/* 班次定义
+   baseH = 正常班时段（7:30-16:00，8.5h）中需要"额外按倍数计薪"的小时数
+     - 平时：正常班已含在底薪里 → baseH = 0，只有 16:00 之后算加班
+     - 周末：全天 2 倍，含正常班时段 → baseH = 8.5
+     - 节假日：全天 3 倍，含正常班时段 → baseH = 8.5
+   ot   = 16:00-19:30 加班小时数（下早班为 0）
+   rate = 计薪倍数（1=平时1.5× / 2=周末2× / 3=节假日3×） */
+/* 班次定义（按你厂规则）
+   type = 计入哪一档加班费：1=平时1.5×  2=周末2×  3=节假日3×  0=不上班
+   h    = 当天计入该档加班费的小时数
+   note = 时段说明
+   规则：
+     周一~周五 / 周日：7:30-16:00 是 1 倍（含在底薪里，不另计），16:00-19:30 的 3.5h 按 1.5 倍
+     周六：全天 12h 都按 2 倍
+     法定节假日：全天按 3 倍（上满 12h，下早班 8.5h） */
+var SHIFTS = [
+  {k:'wd',    n:'🟢 平时班',     type:1, h:3.5,  note:'16:00后 3.5h @1.5倍'},
+  {k:'wde',   n:'🔵 平时早班',   type:1, h:0,    note:'只到16:00 · 无加班'},
+  {k:'sat',   n:'🟡 周六班',     type:2, h:12,   note:'全天 12h @2倍'},
+  {k:'sate',  n:'🟠 周六早班',   type:2, h:8.5,  note:'7:30-16:00 · 8.5h @2倍'},
+  {k:'sun',   n:'🟣 周日班',     type:1, h:3.5,  note:'16:00后 3.5h @1.5倍'},
+  {k:'sune',  n:'⚪ 周日早班',   type:1, h:0,    note:'只到16:00 · 无加班'},
+  {k:'hol',   n:'🔴 节假日班',   type:3, h:12,   note:'全天 12h @3倍'},
+  {k:'hole',  n:'🟤 节假日早班', type:3, h:8.5,  note:'7:30-16:00 · 8.5h @3倍'},
+  {k:'rest',  n:'😴 休息',       type:0, h:0,    note:'没上班'},
+  {k:'leave', n:'🏖️ 请假',       type:0, h:0,    note:'请假'}
+];
+function shiftOf(k){
+  for (var i=0;i<SHIFTS.length;i++) if (SHIFTS[i].k===k) return SHIFTS[i];
+  return null;
+}
+function num(v){ var n = parseFloat(v); return isFinite(n) ? n : 0; }
+
+/* 该班次当天计入加班费的小时数 */
+function shiftHours(sf){
+  if (!sf || !sf.type) return 0;
+  return num(sf.h);
+}
+/* 该档的实际倍率（取设置里的值，默认 1.5 / 2 / 3） */
+function shiftRateVal(sf){
+  var st = (typeof DB !== 'undefined' && DB && DB.settings) ? DB.settings : null;
+  if (!st || !sf || !sf.type) return sf ? (sf.type === 1 ? 1.5 : sf.type === 2 ? 2 : 3) : 0;
+  return sf.type === 1 ? num(st.rate1) : sf.type === 2 ? num(st.rate2) : num(st.rate3);
+}
+/* 明细文案 */
+function shiftDetail(sf){
+  if (!sf || !sf.type) return '不计薪';
+  if (num(sf.h) <= 0) return '无加班（正常班含在底薪）';
+  return '记 ' + num(sf.h) + 'h @' + shiftRateVal(sf) + '倍';
+}
+/* 当天这笔班次的加班费（元） */
+function shiftPay(sf){
+  if (!sf || !sf.type) return 0;
+  var st = (typeof DB !== 'undefined' && DB && DB.settings) ? DB.settings : null;
+  if (!st) return 0;
+  var hourly = (typeof calcHourlyRate === 'function') ? calcHourlyRate(st) : 0;
+  return Math.round(num(sf.h) * hourly * shiftRateVal(sf) * 100) / 100;
+}
+
+/* 北京时间：用 UTC 偏移换算，不受手机时区/系统时间影响 */
+function bjDate(){
+  var now = new Date();
+  var utc = now.getTime() + now.getTimezoneOffset() * 60000;
+  return new Date(utc + 8 * 3600000);
+}
+function pad2(n){ return (n<10?'0':'') + n; }
+function bjTimeHM(){
+  var d = bjDate();
+  return pad2(d.getHours()) + ':' + pad2(d.getMinutes());
+}
+function bjTimeHMS(){
+  var d = bjDate();
+  return pad2(d.getHours()) + ':' + pad2(d.getMinutes()) + ':' + pad2(d.getSeconds());
+}
+var WEEKCN = ['周日','周一','周二','周三','周四','周五','周六'];
+function bjDateStr(){
+  var d = bjDate();
+  return (d.getMonth()+1) + '月' + d.getDate() + '日 ' + WEEKCN[d.getDay()];
+}
+function tickClock(){
+  if ($('bj-time')) $('bj-time').textContent = bjTimeHMS();
+  if ($('bj-date')) $('bj-date').textContent = bjDateStr();
+}
 var calMonth = monthStr();
 var calSel = todayStr();
 
@@ -1541,8 +1889,8 @@ function renderCal(){
     else if (spend > 0) mk = '<span class="mk">-'+Math.round(spend)+'</span>';
     var sh = '';
     if (ck && ck.shift){
-      var sf = SHIFTS.filter(function(s){ return s.k === ck.shift; })[0];
-      if (sf) sh = '<span class="sh">'+(ck.shift==='night'?'🌙':ck.shift==='day'?'☀️':ck.shift==='rest'?'😴':'🏖️')+'</span>';
+      var sf = shiftOf(ck.shift);
+      if (sf) sh = '<span class="sh">'+sf.n.slice(0,2)+'</span>';
     }
     h += '<div class="'+cls+'" onclick="pickDay(\''+ds+'\')">'+sh+'<span class="d">'+i+'</span>'+mk+'</div>';
   }
@@ -1587,8 +1935,41 @@ function renderDayDetail(){
   var ck = DB.checkins[calSel] || {};
   $('c-moods').innerHTML = MOODS.map(function(m){
     return '<button class="'+(ck.mood===m?'on':'')+'" onclick="setMood(\''+m+'\')">'+m+'</button>'; }).join('');
-  $('c-shifts').innerHTML = SHIFTS.map(function(s){
-    return '<button class="'+(ck.shift===s.k?'on':'')+'" onclick="setShift(\''+s.k+'\')">'+s.n+'</button>'; }).join('');
+  /* 班次按类型分组渲染：平时 / 周六 / 周日 / 节假日 / 不上班 */
+  var GROUPS = [
+    { t:'周一 ~ 周五', cls:'g-wd',  ks:['wd','wde'] },
+    { t:'周六',       cls:'g-sat', ks:['sat','sate'] },
+    { t:'周日',       cls:'g-sun', ks:['sun','sune'] },
+    { t:'法定节假日',  cls:'g-hol', ks:['hol','hole'] },
+    { t:'不上班',     cls:'g-off', ks:['rest','leave'] }
+  ];
+  $('c-shifts').innerHTML = '<div class="shiftwrap">' + GROUPS.map(function(g){
+    var btns = g.ks.map(function(k){
+      var sf = shiftOf(k);
+      if (!sf) return '';
+      var pay = shiftPay(sf);
+      var payTxt = pay > 0 ? '≈ ' + fmt(pay) + ' 元' : '无加班费';
+      return '<button class="'+g.cls+(ck.shift===k?' on':'')+'" onclick="setShift(\''+k+'\')">' +
+        '<span class="sn">'+sf.n+'</span>' +
+        '<span class="sd">'+sf.note+'</span>' +
+        '<span class="sp">'+payTxt+'</span></button>';
+    }).join('');
+    return '<div class="shiftgrp"><div class="shiftgrp-t">'+g.t+'</div>' +
+      '<div class="shifts">'+btns+'</div></div>';
+  }).join('') + '</div>';
+  /* 打卡时刻（北京时间） */
+  var ckt = $('c-cktime');
+  if (ckt){
+    if (ck.shift && ck.time){
+      var sf2 = shiftOf(ck.shift);
+      ckt.innerHTML = '🕐 打卡于 <b>' + ck.time + '</b>（北京时间）' +
+        (sf2 && sf2.type > 0 ? '<br>💰 ' + shiftDetail(sf2) + ' · 约 ' + fmt(shiftPay(sf2)) + ' 元' : '');
+    } else if (ck.shift){
+      ckt.innerHTML = '🕐 现在打卡将记为 <b>' + bjTimeHM() + '</b>';
+    } else {
+      ckt.innerHTML = '🕐 当前北京时间 <b>' + bjTimeHM() + '</b> · 选择班次后记录';
+    }
+  }
   if (!$('c-cat').innerHTML) $('c-cat').innerHTML = CATS.out.map(function(c){ return '<option>'+c+'</option>'; }).join('');
 
   var ots = DB.days.filter(function(x){ return x.date === calSel; });
@@ -1621,12 +2002,34 @@ function setMood(m){
   save(); renderDayDetail(); renderCal();
 }
 function setShift(k){
+  if (!calSel) return;
   var isNew = !DB.checkins[calSel];
-  ensureCheckin(); DB.checkins[calSel].shift = k;
+  ensureCheckin();
+  DB.checkins[calSel].shift = k;
+  DB.checkins[calSel].time = bjTimeHM();   // 记录打卡时刻（北京时间）
+  var sf = shiftOf(k);
+
+  /* 上班类：把当天加班同步为班次对应时长，按费率归入 1.5× / 2× / 3× */
+  if (sf && sf.type > 0){
+    var date = calSel, type = sf.type, hs = shiftHours(sf);
+    DB.days = DB.days.filter(function(d){
+      return !(d.date === date && d.from === 'shift');   // 先清掉当天所有班次产生的记录
+    });
+    if (hs > 0) DB.days.push({ date: date, type: type, hours: hs, from: 'shift', shift: k });
+  } else {
+    /* 休息 / 请假：清掉当天由班次产生的加班 */
+    DB.days = DB.days.filter(function(d){ return !(d.date === calSel && d.from === 'shift'); });
+  }
+
   if (isNew) { addPoints(5); toast('签到成功 +5 分 🎉'); checkBadges();
-    logAct('sign', '签到 ' + calSel + '（' + (SHIFTS.filter(function(x){return x.k===k;})[0]||{}).n + '）'); }
+    logAct('sign', '签到 ' + calSel + '（' + (sf ? sf.n : k) + '）'); }
   else save();
-  save(); renderDayDetail(); renderCal(); renderStats();
+  save(); renderDayDetail(); renderCal(); renderStats(); renderForecast();
+
+  /* 提示本次记了什么 */
+  if (sf && sf.type > 0) setTimeout(function(){
+    toast(sf.n.replace(/\s/g,'') + ' · ' + shiftDetail(sf) + ' · 打卡 ' + bjTimeHM());
+  }, 400);
 }
 function ensureCheckin(){
   if (!DB.checkins) DB.checkins = {};
@@ -1738,10 +2141,20 @@ function monthBalance(){
 }
 
 /* ========== 操作日志 / 反馈 / 版本更新 ========== */
-var APP_VERSION = '1.4.1';
-var VERSION_CODE = 141;
+var APP_VERSION = '1.5.1';
+var VERSION_CODE = 151;
 /* 内置更新历史：每次发版在这里追加一条，最上面是最新版 */
 var CHANGELOG = [
+  { v:'1.5.1', code:151, date:'2026-09-23', items:[
+    '班次页面重做：按「平时/周六/周日/节假日/不上班」分组的 2 列卡片，配色区分',
+    '每张班次卡片直接显示当天能拿多少加班费',
+    '心情选择改为 6 列网格，不再挤在一行' ] },
+  { v:'1.5.0', code:150, date:'2026-09-23', items:[
+    '日历打卡改为 10 档班次：平时班/平时早班/周六班/周六早班/周日班/周日早班/节假日班/节假日早班/休息/请假',
+    '按你厂规则计薪：平时与周日 16:00 后 3.5h 按 1.5 倍，周六全天 12h 按 2 倍，节假日全天按 3 倍',
+    '打卡自动记录北京时间（精确到分），日历格显示班次色标',
+    '顶部常驻北京时钟，每秒刷新，不受手机时区影响',
+    '新增内置计算器（右下角悬浮按钮），算完可一键填入记账金额或加班小时' ] },
   { v:'1.4.1', code:141, date:'2026-09-21', items:[
     '支持在线热更新：通过网址打开/安装时，检测到新版本点一下就升级，不用重装',
     '设置页新增「刷新到最新」，可手动强制拉取最新版本',
@@ -2146,6 +2559,7 @@ function initAll(){
   calMonth = monthStr(); calSel = todayStr();
   calcAndRender(); renderForecast(); renderLedger(); renderWageHistory(); renderCal();
   renderVerInfo(); renderHistory(); renderSearch(); autoCheckUpdate();
+  tickClock(); setInterval(tickClock, 1000);
 }
 function bind(){
   var ids = ['w-ot1','w-ot2','w-ot3','w-absent','w-a-post','w-a-meal','w-a-night','w-a-perf','w-a-full',
